@@ -31,26 +31,26 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Alpha|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Alpha|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -77,7 +77,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Alpha|Win32'">
-    <OutDir>.\..\DebugAxp\</OutDir>
+    <OutDir>..\..\..\..\..\Program Files %28x86%29\GOG Galaxy\Games\Quake II\MyMod</OutDir>
     <IntDir>.\DebugAxp\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
@@ -85,17 +85,20 @@
     <IntDir>.\release\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <TargetName>gamex86</TargetName>
-    <OutDir>.\release</OutDir>
+    <OutDir>..\..\..\..\..\Program Files %28x86%29\GOG Galaxy\Games\Quake II\MyMod</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Alpha|Win32'">
-    <OutDir>.\..\ReleaseAXP\</OutDir>
+    <OutDir>..\..\..\..\..\Program Files %28x86%29\GOG Galaxy\Games\Quake II\MyMod</OutDir>
     <IntDir>.\ReleaseAXP\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>.\..\debug\</OutDir>
+    <OutDir>..\..\..\..\..\Program Files %28x86%29\GOG Galaxy\Games\Quake II\MyMod</OutDir>
     <IntDir>.\debug\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <OutDir>..\..\..\..\..\Program Files %28x86%29\GOG Galaxy\Games\Quake II\MyMod</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Alpha|Win32'">
     <ClCompile>
