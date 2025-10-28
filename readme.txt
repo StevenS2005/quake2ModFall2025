@@ -1,3 +1,19 @@
+Followed the windows version of quake2 setup video on canvas, changed the weapon blaster to a triple blaster and it worked in my quake 2 game!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 This is the complete source code for Quake 2, version 3.19, buildable with
 visual C++ 6.0.  The linux version should be buildable, but we haven't
