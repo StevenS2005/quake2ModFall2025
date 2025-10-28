@@ -829,7 +829,30 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	VectorScale (forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
 
-	fire_blaster (ent, start, forward, damage, 1000, effect, hyper);
+	//-----------------------------------------------------------------------------------------------------------------------
+
+	// BlasterModFromVideo shoot blaster shoots three bullets horizontally
+
+	fire_blaster (ent, start, forward, damage, 1000, effect, hyper); // shoots bullet in the middle
+
+
+	// change position of bullet when firing to the right 
+	// start is our starting vector for the bullet, forward is the direction vector for the bullet
+	start[0] += right[0] * 20;  //start[0] refers to x direction and right[0] refers to our unit right vector x direction
+	start[1] += right[1] * 20;	//start[1] refers to y direction and right[1] refers to our unit right vector y direction
+	start[2] += right[2] * 20;	//start[2] refers to z direction and right[2] refers to our unit right vector z direction
+	fire_blaster(ent, start, forward, damage, 1000, effect, hyper); // shoots bullet to the right
+
+	// change position of bullet when firing to the left 
+	start[0] -= right[0] * 40;  
+	start[1] -= right[1] * 40;	
+	start[2] -= right[2] * 40;	
+	fire_blaster(ent, start, forward, damage, 1000, effect, hyper); // shoots bullet to the left
+
+	//--------------------------------------------------------------------------------------------------------------------------
+
+
+
 
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);
