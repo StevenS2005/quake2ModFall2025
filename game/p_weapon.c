@@ -289,7 +289,7 @@ void Think_Weapon (edict_t *ent)
 	}
 
 	// call active weapon think routine
-	if (ent->client->pers.weapon && ent->client->pers.weapon->weaponthink)
+	if (ent->client->pers.weapon && ent->client->pers.weapon->weaponthink) //Checks if player has a weapon and weapon has weaponthink?? 
 	{
 		is_quad = (ent->client->quad_framenum > level.framenum);
 		if (ent->client->silencer_shots)
@@ -451,9 +451,14 @@ void Weapon_Generic (edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST,
 
 	if (ent->client->weaponstate == WEAPON_READY)
 	{
-		if ( ((ent->client->latched_buttons|ent->client->buttons) & BUTTON_ATTACK) )
+		// changed so blaster autofires
+		if ( ( (ent->client->latched_buttons|ent->client->buttons) & BUTTON_ATTACK) || (ent->client->pers.weapon->classname == "weapon_blaster")) // added  "|| ..." so that we can enter this loop by  being a blaster so no need to press button attack
 		{
-			ent->client->latched_buttons &= ~BUTTON_ATTACK;
+			if (ent->client->pers.weapon->classname != "weapon_blaster") // added this since if it is blaster we arent checking if we releasing our attack button
+			{
+				ent->client->latched_buttons &= ~BUTTON_ATTACK;
+			}
+
 			if ((!ent->client->ammo_index) || 
 				( ent->client->pers.inventory[ent->client->ammo_index] >= ent->client->pers.weapon->quantity))
 			{
