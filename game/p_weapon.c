@@ -834,7 +834,19 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	VectorScale (forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
 
+
+
+	// Dual shots
+	
+	// shoots regular bullet in the middle
 	fire_blaster (ent, start, forward, damage, 1000, effect, hyper);
+
+	// shoots another bullet to the right
+	start[0] += right[0] * 20;
+	start[1] += right[1] * 20;
+	start[2] += right[2] * 20;
+	fire_blaster (ent, start, forward, damage, 1000, effect, hyper);
+
 
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);
