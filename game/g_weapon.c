@@ -334,8 +334,8 @@ void blaster_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *
 			VectorInverse(knockbackvector);
 
 			//change monsters velocity vector
-			VectorMA(other->velocity, 1000, knockbackvector,other->velocity);
-			other->velocity[2] += 300;
+			VectorMA(other->velocity, 700, knockbackvector,other->velocity);
+			other->velocity[2] += 400;
 
 			//Prints message to screen
 			gi.centerprintf(self->owner, "knocked back monster");
