@@ -321,6 +321,26 @@ void blaster_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *
 
 	if (other->takedamage)
 	{
+		// knockbacks monsters
+		// 
+		//checks if we hit monsters
+		if (other->svflags & SVF_MONSTER)
+		{
+			// knockback logic
+			vec3_t knockbackvector;
+
+
+			VectorCopy(plane->normal, knockbackvector);
+			VectorInverse(knockbackvector);
+
+			VectorMA(other->velocity, 1000, knockbackvector,other->velocity);
+			other->velocity[2] += 300;
+
+			//Prints message to screen
+			gi.centerprintf(self->owner, "knocked back monster");
+
+		}
+
 		if (self->spawnflags & 1)
 			mod = MOD_HYPERBLASTER;
 		else
