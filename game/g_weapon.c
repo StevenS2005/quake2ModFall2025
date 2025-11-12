@@ -322,17 +322,18 @@ void blaster_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *
 	if (other->takedamage)
 	{
 		// knockbacks monsters
-		// 
-		//checks if we hit monsters
-		if (other->svflags & SVF_MONSTER)
+		
+		//checks if we hit monsters and we have a plane
+		if (other->svflags & SVF_MONSTER && plane)
 		{
 			// knockback logic
-			vec3_t knockbackvector;
 
+			vec3_t knockbackvector;
 
 			VectorCopy(plane->normal, knockbackvector);
 			VectorInverse(knockbackvector);
 
+			//change monsters velocity vector
 			VectorMA(other->velocity, 1000, knockbackvector,other->velocity);
 			other->velocity[2] += 300;
 
