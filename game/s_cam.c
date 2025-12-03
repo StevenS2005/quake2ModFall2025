@@ -243,7 +243,7 @@ void ChasecamTrack(edict_t* ent)
 
 
 
-    VectorNegate(forward, forward); // cam behind player bruhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+    VectorInverse(forward); // cam behind player bruhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 
     /* go starting at the player's origin, forward, ent->chasedist1
 
