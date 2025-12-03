@@ -321,18 +321,39 @@ void SV_CalcViewOffset (edict_t *ent)
 	// absolutely bound offsets
 	// so the view can never be outside the player box
 
-	if (v[0] < -14)
-		v[0] = -14;
-	else if (v[0] > 14)
-		v[0] = 14;
-	if (v[1] < -14)
-		v[1] = -14;
-	else if (v[1] > 14)
-		v[1] = 14;
-	if (v[2] < -22)
-		v[2] = -22;
-	else if (v[2] > 30)
-		v[2] = 30;
+	if (!ent->client->chasetoggle)
+	{
+		if (v[0] < -14)
+			v[0] = -14;
+		else if (v[0] > 14)
+			v[0] = 14;
+
+		if (v[1] < -14)
+			v[1] = -14;
+		else if (v[1] > 14)
+			v[1] = 14;
+
+		if (v[2] < -22)
+			v[2] = -22;
+		else if (v[2] > 30)
+			v[2] = 30;
+	}
+
+	else
+	{
+		VectorSet(v, 0, 0, 0);
+
+		if (ent->client->chasecam != NULL)
+		{
+			ent->client->ps.pmove.origin[0] = ent->client->chasecam->s.origin[0] * 8;
+
+			ent->client->ps.pmove.origin[1] = ent->client->chasecam->s.origin[1] * 8;
+
+			ent->client->ps.pmove.origin[2] = ent->client->chasecam->s.origin[2] * 8;
+
+			VectorCopy(ent->client->chasecam->s.angles, ent->client->ps.viewangles);
+		}
+	}
 
 	VectorCopy (v, ent->client->ps.viewoffset);
 }
@@ -1083,5 +1104,8 @@ void ClientEndServerFrame (edict_t *ent)
 		DeathmatchScoreboardMessage (ent, ent->enemy);
 		gi.unicast (ent, false);
 	}
+
+	if (ent->client->chasetoggle == 1)
+		CheckChasecam_Viewent(ent);
 }
 

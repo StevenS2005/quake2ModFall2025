@@ -985,6 +985,10 @@ void ClientCommand (edict_t *ent)
 		Cmd_PutAway_f (ent);
 	else if (Q_stricmp (cmd, "wave") == 0)
 		Cmd_Wave_f (ent);
+
+	//SBOF: well, gee.... I'm not sure.
+	else if (Q_stricmp(cmd, "chasecam") == 0)
+		Cmd_Chasecam_Toggle(ent);
 	else if (Q_stricmp(cmd, "playerlist") == 0)
 		Cmd_PlayerList_f(ent);
 	else	// anything that doesn't match a command will be a chat
