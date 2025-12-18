@@ -35,6 +35,9 @@ void Weapon_Grenade (edict_t *ent);
 void Weapon_GrenadeLauncher (edict_t *ent);
 void Weapon_Railgun (edict_t *ent);
 void Weapon_BFG (edict_t *ent);
+void Weapon_Sword(edict_t* ent);
+void Weapon_MagicStaff(edict_t* ent);
+void Weapon_Bow(edict_t* ent);
 
 gitem_armor_t jacketarmor_info	= { 25,  50, .30, .00, ARMOR_JACKET};
 gitem_armor_t combatarmor_info	= { 50, 100, .60, .30, ARMOR_COMBAT};
@@ -51,6 +54,7 @@ static int	power_shield_index;
 
 void Use_Quad (edict_t *ent, gitem_t *item);
 static int	quad_drop_timeout_hack;
+
 
 //======================================================================
 
@@ -480,14 +484,57 @@ qboolean Add_Ammo (edict_t *ent, gitem_t *item, int count)
 	return true;
 }
 
-qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
+
+qboolean Pickup_Ammo(edict_t* ent, edict_t* other)
 {
-	int			oldcount;
-	int			count;
-	qboolean	weapon;
+	int oldcount, count;
+	qboolean weapon;
+
+	if (Q_stricmp(ent->item->pickup_name, "Shells") == 0)
+	{
+		if (other->client->pers.sword_level < 3) {
+			other->client->pers.sword_level++;
+			if (other->client->pers.sword_level == 1) gi.centerprintf(other, "SWORD UPGRADED: Damage!");
+			else if (other->client->pers.sword_level == 2) gi.centerprintf(other, "SWORD UPGRADED: Knockback!");
+			else if (other->client->pers.sword_level == 3) gi.centerprintf(other, "SWORD UPGRADED: Range!");
+
+			gi.sound(other, CHAN_ITEM, gi.soundindex("misc/w_pkup.wav"), 1, ATTN_NORM, 0);
+		}
+		else {
+		}
+	}
+
+	if (Q_stricmp(ent->item->pickup_name, "Bullets") == 0)
+	{
+		if (other->client->pers.bow_level < 3) {
+			other->client->pers.bow_level++;
+			if (other->client->pers.bow_level == 1) gi.centerprintf(other, "BOW UPGRADED: Triple Shot!");
+			else if (other->client->pers.bow_level == 2) gi.centerprintf(other, "BOW UPGRADED: Poison!");
+			else if (other->client->pers.bow_level == 3) gi.centerprintf(other, "BOW UPGRADED: Explosive!");
+
+			gi.sound(other, CHAN_ITEM, gi.soundindex("misc/w_pkup.wav"), 1, ATTN_NORM, 0);
+		}
+		else {
+		}
+	}
+
+	if (Q_stricmp(ent->item->pickup_name, "Cells") == 0)
+	{
+		if (other->client->pers.staff_level < 3) {
+			other->client->pers.staff_level++;
+			if (other->client->pers.staff_level == 1) gi.centerprintf(other, "STAFF UPGRADED: Fire Ball!");
+			else if (other->client->pers.staff_level == 2) gi.centerprintf(other, "STAFF UPGRADED: Ice Ball!");
+			else if (other->client->pers.staff_level == 3) gi.centerprintf(other, "STAFF UPGRADED: Dual Split!");
+
+			gi.sound(other, CHAN_ITEM, gi.soundindex("misc/w_pkup.wav"), 1, ATTN_NORM, 0);
+		}
+		else {
+		}
+	}
+
 
 	weapon = (ent->item->flags & IT_WEAPON);
-	if ( (weapon) && ( (int)dmflags->value & DF_INFINITE_AMMO ) )
+	if ((weapon) && ((int)dmflags->value & DF_INFINITE_AMMO))
 		count = 1000;
 	else if (ent->count)
 		count = ent->count;
@@ -496,17 +543,19 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 
 	oldcount = other->client->pers.inventory[ITEM_INDEX(ent->item)];
 
-	if (!Add_Ammo (other, ent->item, count))
+	if (!Add_Ammo(other, ent->item, count))
 		return false;
 
 	if (weapon && !oldcount)
 	{
-		if (other->client->pers.weapon != ent->item && ( !deathmatch->value || other->client->pers.weapon == FindItem("blaster") ) )
+		if (other->client->pers.weapon != ent->item)
+		{
 			other->client->newweapon = ent->item;
+		}
 	}
 
 	if (!(ent->spawnflags & (DROPPED_ITEM | DROPPED_PLAYER_ITEM)) && (deathmatch->value))
-		SetRespawn (ent, 30);
+		SetRespawn(ent, 30);
 	return true;
 }
 
@@ -1060,6 +1109,10 @@ be on an entity that hasn't spawned yet.
 */
 void SpawnItem (edict_t *ent, gitem_t *item)
 {
+	//removes all items from map
+	G_FreeEdict(ent);
+	return;
+
 	PrecacheItem (item);
 
 	if (ent->spawnflags)
@@ -1364,7 +1417,7 @@ always owned, never in the world
 		Drop_Weapon,
 		Weapon_Machinegun,
 		"misc/w_pkup.wav",
-		"models/weapons/g_machn/tris.md2", EF_ROTATE,
+		NULL, 0,
 		"models/weapons/v_machn/tris.md2",
 /* icon */		"w_machinegun",
 /* pickup */	"Machinegun",
@@ -1537,6 +1590,66 @@ always owned, never in the world
 		NULL,
 		0,
 /* precache */ "sprites/s_bfg1.sp2 sprites/s_bfg2.sp2 sprites/s_bfg3.sp2 weapons/bfg__f1y.wav weapons/bfg__l1a.wav weapons/bfg__x1b.wav weapons/bfg_hum.wav"
+	},
+	/* weapon_sword
+	always owned, never in the world
+	*/
+	{
+		"weapon_sword",
+		NULL,
+		Use_Weapon,
+		NULL,
+		Weapon_Sword,
+		"misc/w_pkup.wav",
+		"models/weapons/g_hyperb/tris.md2", EF_ROTATE,
+		"models/weapons/v_blast/tris.md2",
+		/* icon */		"w_blaster",
+		/* pickup */	"Sword",
+				0,
+				0,
+				NULL,
+				IT_WEAPON | IT_STAY_COOP,
+				WEAP_BLASTER,
+				NULL,
+				0,
+				/* precache */ "weapons/hgrenlb1b.wav misc/fhit3.wav"
+	},
+	{
+		"weapon_magicstaff",
+		NULL,
+		Use_Weapon,
+		NULL,
+		Weapon_MagicStaff,
+		"misc/w_pkup.wav",
+		"models/weapons/g_bfg/tris.md2", EF_ROTATE,
+		"models/weapons/v_rail/tris.md2",
+		"w_railgun",
+		"Magic Staff",
+		0,
+		0,             
+		NULL, 
+		IT_WEAPON,
+		NULL,
+		0,
+		"weapons/bfg__f1y.wav weapons/rocklf1a.wav models/objects/rocket/tris.md2" },
+	{
+		"weapon_bow",
+		NULL,
+		Use_Weapon,
+		NULL,
+		Weapon_Bow,
+		"misc/w_pkup.wav",
+		NULL, 0,
+		"models/weapons/v_shotg/tris.md2",
+		"w_shotgun",
+		"Bow",
+		0,
+		0,      
+		NULL,
+		IT_WEAPON,
+		NULL,
+		0,
+		"weapons/rocklf1a.wav" 
 	},
 
 	//

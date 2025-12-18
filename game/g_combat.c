@@ -84,6 +84,36 @@ qboolean CanDamage (edict_t *targ, edict_t *inflictor)
 }
 
 
+
+void TossLoot(edict_t* self)
+{
+	gitem_t* item = NULL;
+	float chance = random(); 
+
+	if (chance > 0.5) 
+	{
+		item = FindItem("Combat Armor"); // sword upgrade
+	}
+	else if (chance > 0.3) 
+	{
+		item = FindItem("Shells"); 
+	}
+	else if (chance > 0.2) 
+	{
+		item = FindItem("Bullets"); // Bow Upgrade
+	}
+	else 
+	{
+		item = FindItem("Cells"); // Staff Upgrade
+	}
+
+	if (item)
+	{
+		Drop_Item(self, item);
+	}
+}
+
+
 /*
 ============
 Killed
@@ -95,6 +125,11 @@ void Killed (edict_t *targ, edict_t *inflictor, edict_t *attacker, int damage, v
 		targ->health = -999;
 
 	targ->enemy = attacker;
+
+	if (targ->svflags & SVF_MONSTER)
+	{
+		TossLoot(targ);
+	}
 
 	if ((targ->svflags & SVF_MONSTER) && (targ->deadflag != DEAD_DEAD))
 	{

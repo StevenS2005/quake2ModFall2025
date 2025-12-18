@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "m_player.h"
 
 
+
 static qboolean	is_quad;
 static byte		is_silenced;
 
@@ -807,13 +808,12 @@ void Weapon_RocketLauncher (edict_t *ent)
 }
 
 
-/*
-======================================================================
 
-BLASTER / HYPERBLASTER
 
-======================================================================
-*/
+
+//---------------------------------------------------------------------------------------------------------
+
+
 
 void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, int effect)
 {
@@ -865,6 +865,7 @@ void Weapon_Blaster (edict_t *ent)
 
 	Weapon_Generic (ent, 4, 8, 52, 55, pause_frames, fire_frames, Weapon_Blaster_Fire);
 }
+
 
 
 void Weapon_HyperBlaster_Fire (edict_t *ent)
@@ -1431,6 +1432,9 @@ void Weapon_BFG (edict_t *ent)
 
 	Weapon_Generic (ent, 8, 32, 55, 58, pause_frames, fire_frames, weapon_bfg_fire);
 }
+
+
+#include "g_highln.h"
 
 
 //======================================================================

@@ -861,7 +861,11 @@ typedef struct
 	int			game_helpchanged;
 	int			helpchanged;
 
-	qboolean	spectator;			// client is a spectator
+	qboolean	spectator;	// client is a spectator
+
+	int			sword_level;
+	int			bow_level;
+	int			staff_level;
 } client_persistant_t;
 
 // client data that stays across deathmatch respawns
@@ -1118,7 +1122,17 @@ struct edict_s
 	//SBOF: Chasecam variables
 	int chasedist1;
 	int chasedist2;
+
+	//Wave System
+
+	int waveStarted; //0 = wave is off else waves are active
 };
 
 extern void CheckChasecam_Viewent(edict_t* ent);
+
+//Wave System
+
+extern int waveCounter;
+extern float nextWaveTime;
+extern void startWave(edict_t* ent);
 

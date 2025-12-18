@@ -620,6 +620,73 @@ void SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 }
 
 
+
+// Wave System
+int waveCounter = 0;
+float nextWaveTime = 0;
+
+void startWave(edict_t* ent)
+{
+	if (!ent) {
+		return;
+	}
+
+	edict_t* monster;
+	vec3_t monsterSpawnPoint;
+	trace_t tr; 
+	vec3_t mins = { -10, -10, -20 }; // rectangle shape for monster i think right 
+	vec3_t maxs = { 10, 10, 20 }; // theres probably a right number to this, should've asked
+	int i;
+	int attempts;
+	qboolean validSpot;
+
+	// Find num of monstsers to spawn each wave, wave 1 gonna have 5, wave 2: 10, wave 3: 15 and so on
+	// maybe change to expontenial idk	int numOfMonstersToSpawn = waveCounter * 15;
+	int numOfMonstersToSpawn = 15;
+
+
+	for (i = 0; i < numOfMonstersToSpawn; i++)
+	{
+		monster = G_Spawn();
+		monster->classname = "monster_soldier_light";
+
+		// need to fix problem where monster spawn in wall
+		// 
+		// We try up to 10 times to find a spot that isn't inside a wall.
+		validSpot = false;
+		for (attempts = 0; attempts < 10; attempts++)
+		{
+			//Spawn monsters in a randomized position relative to the player
+			VectorCopy(ent->s.origin, monsterSpawnPoint);
+
+			monsterSpawnPoint[0] += (crandom() * 550); //range of - 550 to + 550 units away, x axis
+			monsterSpawnPoint[1] += (crandom() * 550); // range of - 550 to + 550 units away, y- axis
+			monsterSpawnPoint[2] += 5; 
+
+			tr = gi.trace(monsterSpawnPoint, mins, maxs, monsterSpawnPoint, NULL, MASK_SOLID);
+
+			// startsolid means the box started inside a wall.
+			if (!tr.startsolid)
+			{
+				validSpot = true;
+				break; 
+			}
+		}
+		// If after 10 tries we still failed, just spawn near on top of pplayer
+		if (!validSpot)
+		{
+			VectorCopy(ent->s.origin, monsterSpawnPoint);
+			monsterSpawnPoint[2] += 50; 
+			monsterSpawnPoint[1] += 20;
+		}
+
+		VectorCopy(monsterSpawnPoint, monster->s.origin);
+
+		ED_CallSpawn(monster);
+	}
+}
+
+
 //===================================================================
 
 #if 0
@@ -980,5 +1047,12 @@ void SP_worldspawn (edict_t *ent)
 
 	// 63 testing
 	gi.configstring(CS_LIGHTS+63, "a");
+
+	// auto changes to this another map
+	if (Q_stricmp(level.mapname, "base1") == 0)
+	{
+		gi.AddCommandString("map q2dm1\n");
+		return;
+	}
 }
 

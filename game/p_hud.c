@@ -313,22 +313,19 @@ void HelpComputer (edict_t *ent)
 	else
 		sk = "hard+";
 
+
 	// send the layout
 	Com_sprintf (string, sizeof(string),
-		"xv 32 yv 8 picn help "			// background
-		"xv 202 yv 12 string2 \"%s\" "		// skill
-		"xv 0 yv 24 cstring2 \"%s\" "		// level name
-		"xv 0 yv 54 cstring2 \"%s\" "		// help 1
-		"xv 0 yv 110 cstring2 \"%s\" "		// help 2
-		"xv 50 yv 164 string2 \" kills     goals    secrets\" "
-		"xv 50 yv 172 string2 \"%3i/%3i     %i/%i       %i/%i\" ", 
-		sk,
-		level.level_name,
-		game.helpmessage1,
-		game.helpmessage2,
-		level.killed_monsters, level.total_monsters, 
-		level.found_goals, level.total_goals,
-		level.found_secrets, level.total_secrets);
+		// "xv 32 yv 8 picn help "			// background
+		//"xv 202 yv 12 string2 \"Mod Help\" "		// skill
+		"xv 0 yv 24 cstring2 \"Mod Help\nPress e to toggle third Person camera, Press i to start wave!\nSurvive 10 Waves of monsters.\nMonsters Drop items!\n\" "		// level name
+		"xv 0 yv 54 cstring2 \"\nWeapons so far:\n - Sword: Already Have! \n - Magic Staff! \n - Archer's Bow!\" "		// help 1
+		"xv 0 yv 110 cstring2 \"\" "		// help 2
+		"xv 50 yv 164 string2 \" Wave: %i \" "
+		"xv 50 yv 172 string2 \"\" ", 
+		
+		
+		waveCounter);
 
 	gi.WriteByte (svc_layout);
 	gi.WriteString (string);

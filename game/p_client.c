@@ -610,11 +610,17 @@ void InitClientPersistant (gclient_t *client)
 
 	memset (&client->pers, 0, sizeof(client->pers));
 
-	item = FindItem("Blaster");
-	client->pers.selected_item = ITEM_INDEX(item);
-	client->pers.inventory[client->pers.selected_item] = 1;
+	item = FindItem("Sword");
+	client->pers.inventory[ITEM_INDEX(item)] = 1;
 
-	client->pers.weapon = item;
+	item = FindItem("Magic Staff");
+	client->pers.inventory[ITEM_INDEX(item)] = 1;
+
+	item = FindItem("Bow");
+	client->pers.inventory[ITEM_INDEX(item)] = 1;
+
+	client->pers.weapon = FindItem("Sword");
+
 
 	client->pers.health			= 100;
 	client->pers.max_health		= 100;
@@ -1749,6 +1755,56 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		other = g_edicts + i;
 		if (other->inuse && other->client->chase_target == ent)
 			UpdateChaseCam(other);
+	}
+
+
+
+// Wave System
+
+	if (ent->waveStarted != 0)
+	{
+		// Check if it's time to spawn the next wave
+		if (level.time > nextWaveTime)
+		{
+			waveCounter++;
+
+			// Start the wave 
+			startWave(ent);
+			gi.centerprintf(ent, "WAVE %d STARTED", waveCounter);
+
+			// Set time for next wave 
+			nextWaveTime = level.time + 30.0;
+
+
+			// Stop after 5 waves
+			if (waveCounter >= 10)
+			{
+				ent->waveStarted = 0; //waves are off
+				waveCounter = 0;
+				gi.centerprintf(ent, "Wave Complete!");
+			}
+
+			
+
+
+			// clear dropped items
+			if (waveCounter % 2 == 0) // ever two maps
+			{
+				for (i = 0; i < globals.num_edicts; i++)
+				{
+					ent = &g_edicts[i];
+
+					if (!ent->inuse) continue;
+
+					if (ent->item && (ent->spawnflags & DROPPED_ITEM))
+					{
+						G_FreeEdict(ent);
+					}
+				}			
+
+				gi.dprintf("Wave %d - Clearing Loot\n", waveCounter);
+			}
+		}
 	}
 }
 

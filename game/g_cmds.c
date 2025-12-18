@@ -986,6 +986,16 @@ void ClientCommand (edict_t *ent)
 	else if (Q_stricmp (cmd, "wave") == 0)
 		Cmd_Wave_f (ent);
 
+	// Wave System
+	else if (Q_stricmp(cmd, "wave_start") == 0)
+	{
+		ent->waveStarted = 1;
+		waveCounter = 0;
+		nextWaveTime = level.time + 3.0; 
+		gi.centerprintf(ent, "GET READY!\nWaves starting in 3 seconds...");
+		return;
+	}
+
 	//SBOF: well, gee.... I'm not sure.
 	else if (Q_stricmp(cmd, "chasecam") == 0)
 		Cmd_Chasecam_Toggle(ent);
@@ -993,4 +1003,5 @@ void ClientCommand (edict_t *ent)
 		Cmd_PlayerList_f(ent);
 	else	// anything that doesn't match a command will be a chat
 		Cmd_Say_f (ent, false, true);
+
 }

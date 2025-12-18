@@ -469,6 +469,7 @@
     <ClCompile Include="s_cam.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="g_highln.h" />
     <ClInclude Include="g_local.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="m_actor.h" />
