@@ -60,7 +60,6 @@ void Weapon_Sword_Fire(edict_t* ent)
 	int kick = 200;
 	int range = 45;
 
-	// CHECK UPGRADES
 	if (ent->client->pers.sword_level >= 1) damage = 100;  // Level 1: Damage
 	if (ent->client->pers.sword_level >= 2) kick = 800;   // Level 2: Kick
 	if (ent->client->pers.sword_level >= 3) range = 200;   // Level 3: Range
@@ -115,13 +114,14 @@ void Weapon_MagicStaff_Fire(edict_t* ent)
 		}
 		else
 		{
+			//base
 			fire_bfg(ent, start, aim_dir, 80, 600, 200);
 		}
 	}
 
 	ent->client->ps.gunframe++;
 
-	// should play diff sounds based on type not sure if works?
+	// should play diff sounds based on type
 	if (ent->client->pers.staff_level == 1)
 		gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/rocklf1a.wav"), 1, ATTN_NORM, 0); 
 	else if (ent->client->pers.staff_level == 2)
@@ -138,15 +138,19 @@ void Weapon_MagicStaff(edict_t* ent)
 	Weapon_Generic(ent, 3, 18, 56, 61, pause_frames, fire_frames, Weapon_MagicStaff_Fire);
 }
 
-// bow logic
+// bow 
 
 void arrow_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface_t* surf)
 {
-	if (other == self->owner) return;
-	if (surf && (surf->flags & SURF_SKY)) { G_FreeEdict(self); return; }
+	if (other == self->owner)
+		return; // dont hit me
+	if (surf && (surf->flags & SURF_SKY)) { 
+		G_FreeEdict(self); // if hits the sky, make it disappear to keep the illusion
+		return; 
+	}
 
 	//Explosion
-	if (self->owner->client->pers.bow_level >= 3) {
+	if (self->owner->client->pers.bow_level == 3) {
 		T_RadiusDamage(self, self->owner, 100, other, 120, MOD_R_SPLASH);
 		gi.WriteByte(svc_temp_entity);
 		gi.WriteByte(TE_EXPLOSION1);
@@ -154,7 +158,7 @@ void arrow_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface_t* sur
 		gi.multicast(self->s.origin, MULTICAST_PVS);
 	}
 
-	// poision
+	// poision (more like just increased cause thats what it is since didnt have time to do like actual poision effect)
 	if (self->owner->client->pers.bow_level >= 2) {
 		self->dmg += 30;
 	}
@@ -188,7 +192,7 @@ void fire_arrow(edict_t* self, vec3_t start, vec3_t dir, int damage, int speed)
 	arrow->dmg = damage;
 	arrow->classname = "arrow";
 	arrow->nextthink = level.time + 10;
-	arrow->think = G_FreeEdict;
+	arrow->think = G_FreeEdict; // if 10 seconds without hitting something free the arrow (i think)
 	gi.linkentity(arrow);
 }
 
@@ -203,7 +207,8 @@ void Weapon_Bow_Fire(edict_t* ent)
 	P_ProjectSource(ent->client, ent->s.origin, offset, forward, right, start);
 
 	//triple shot
-	if (ent->client->pers.bow_level >= 1) arrows = 3;
+	if (ent->client->pers.bow_level >= 1) 
+		arrows = 3;
 
 	for (int i = 0; i < arrows; i++)
 	{

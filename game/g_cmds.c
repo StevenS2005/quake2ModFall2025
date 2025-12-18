@@ -989,9 +989,9 @@ void ClientCommand (edict_t *ent)
 	// Wave System
 	else if (Q_stricmp(cmd, "wave_start") == 0)
 	{
-		ent->waveStarted = 1;
-		waveCounter = 0;
-		nextWaveTime = level.time + 3.0; 
+		ent->waveStarted = 1; //set waveStarted to 1 which means its on. 
+		waveCounter = 0;  //reset counter to 0
+		nextWaveTime = level.time + 3.0; // start the wave in 3 seconds
 		gi.centerprintf(ent, "GET READY!\nWaves starting in 3 seconds...");
 		return;
 	}

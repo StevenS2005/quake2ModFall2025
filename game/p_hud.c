@@ -314,6 +314,8 @@ void HelpComputer (edict_t *ent)
 		sk = "hard+";
 
 
+	/* Help Screen Deliverable Here*/
+
 	// send the layout
 	Com_sprintf (string, sizeof(string),
 		// "xv 32 yv 8 picn help "			// background

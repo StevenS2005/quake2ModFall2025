@@ -610,6 +610,7 @@ void InitClientPersistant (gclient_t *client)
 
 	memset (&client->pers, 0, sizeof(client->pers));
 
+	// player starts off with a sword, staff, and bow
 	item = FindItem("Sword");
 	client->pers.inventory[ITEM_INDEX(item)] = 1;
 
@@ -619,6 +620,7 @@ void InitClientPersistant (gclient_t *client)
 	item = FindItem("Bow");
 	client->pers.inventory[ITEM_INDEX(item)] = 1;
 
+	//first weapopn is sword
 	client->pers.weapon = FindItem("Sword");
 
 
@@ -1772,11 +1774,11 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 			startWave(ent);
 			gi.centerprintf(ent, "WAVE %d STARTED", waveCounter);
 
-			// Set time for next wave 
+			// Set time unitil next wave 
 			nextWaveTime = level.time + 30.0;
 
 
-			// Stop after 5 waves
+			// Stop after 10 waves
 			if (waveCounter >= 10)
 			{
 				ent->waveStarted = 0; //waves are off
@@ -1788,21 +1790,21 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 
 
 			// clear dropped items
-			if (waveCounter % 2 == 0) // ever two maps
+			if (waveCounter % 2 == 0) // for every two maps or else game crashes
 			{
-				for (i = 0; i < globals.num_edicts; i++)
+				for (i = 0; i < globals.num_edicts; i++) // loop through how many entities in the map
 				{
 					ent = &g_edicts[i];
 
-					if (!ent->inuse) continue;
+					if (!ent->inuse) continue; //if entitiy is being used dont free it 
 
-					if (ent->item && (ent->spawnflags & DROPPED_ITEM))
+					if (ent->item && (ent->spawnflags & DROPPED_ITEM)) // if the entity is a dropped item then yea free it.
 					{
 						G_FreeEdict(ent);
 					}
 				}			
 
-				gi.dprintf("Wave %d - Clearing Loot\n", waveCounter);
+				gi.dprintf("Wave %d - Clearing Loot\n", waveCounter); // nice message to show that its done also can see through the items disappearing
 			}
 		}
 	}

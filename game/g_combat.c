@@ -85,16 +85,19 @@ qboolean CanDamage (edict_t *targ, edict_t *inflictor)
 
 
 
+
+// drop loot for the monsters in the waves
+
 void TossLoot(edict_t* self)
 {
 	gitem_t* item = NULL;
-	float chance = random(); 
+	float chance = random(); // random num from 0 to 1.0 i believe
 
-	if (chance > 0.5) 
+	if (chance > 0.5)  //50-50
 	{
-		item = FindItem("Combat Armor"); // sword upgrade
+		item = FindItem("Combat Armor"); 
 	}
-	else if (chance > 0.3) 
+	else if (chance > 0.3) // sword upgrade
 	{
 		item = FindItem("Shells"); 
 	}
@@ -126,7 +129,7 @@ void Killed (edict_t *targ, edict_t *inflictor, edict_t *attacker, int damage, v
 
 	targ->enemy = attacker;
 
-	if (targ->svflags & SVF_MONSTER)
+	if (targ->svflags & SVF_MONSTER) //when the monsters gets killed call the drop loot loot function 
 	{
 		TossLoot(targ);
 	}

@@ -604,7 +604,7 @@ void SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 
 	gi.dprintf ("%i entities inhibited\n", inhibit);
 
-#ifdef DEBUG
+#ifdef DEBUG //used to do the wave clearing thing
 	i = 1;
 	ent = EDICT_NUM(i);
 	while (i < globals.num_edicts) {
@@ -625,6 +625,8 @@ void SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 int waveCounter = 0;
 float nextWaveTime = 0;
 
+
+//start wave function
 void startWave(edict_t* ent)
 {
 	if (!ent) {
@@ -640,8 +642,7 @@ void startWave(edict_t* ent)
 	int attempts;
 	qboolean validSpot;
 
-	// Find num of monstsers to spawn each wave, wave 1 gonna have 5, wave 2: 10, wave 3: 15 and so on
-	// maybe change to expontenial idk	int numOfMonstersToSpawn = waveCounter * 15;
+	// Find num of monstsers to spawn each wave constant at 15 because it keeps crashing
 	int numOfMonstersToSpawn = 15;
 
 
@@ -650,6 +651,8 @@ void startWave(edict_t* ent)
 		monster = G_Spawn();
 		monster->classname = "monster_soldier_light";
 
+
+		// ngl had ai help with coming up with the idea on how to solve the issue but still doesnt solve why some monsters just spawn in the air and dont go down, idk, the trace makes sense but not sure why 10 and why in near the top of player head, why not just pick the location of the previous mosnter spawned? but that also could have issues, idk
 		// need to fix problem where monster spawn in wall
 		// 
 		// We try up to 10 times to find a spot that isn't inside a wall.
@@ -679,6 +682,8 @@ void startWave(edict_t* ent)
 			monsterSpawnPoint[2] += 50; 
 			monsterSpawnPoint[1] += 20;
 		}
+
+		
 
 		VectorCopy(monsterSpawnPoint, monster->s.origin);
 
@@ -1048,7 +1053,7 @@ void SP_worldspawn (edict_t *ent)
 	// 63 testing
 	gi.configstring(CS_LIGHTS+63, "a");
 
-	// auto changes to this another map
+	// starts the map in q2dm1, the edge i think its called instead of base1 since its a more open map and better for showcasing the mod
 	if (Q_stricmp(level.mapname, "base1") == 0)
 	{
 		gi.AddCommandString("map q2dm1\n");
