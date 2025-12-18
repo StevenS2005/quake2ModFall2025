@@ -221,11 +221,9 @@ void Weapon_Bow_Fire(edict_t* ent)
 
 void Weapon_Bow(edict_t* ent)
 {
-	
-
 	static int  pause_frames[] = { 22, 28, 34, 0 };
 
-	static int  fire_frames[] = { 8, 9, 0 };
+	static int  fire_frames[] = { 9, 0 };
 
 	Weapon_Generic(ent, 7, 18, 36, 39, pause_frames, fire_frames, Weapon_Bow_Fire);
 }
