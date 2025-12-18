@@ -1,4 +1,5 @@
-// g_highln.h
+// from this website https://web.archive.org/web/20051227025942/http://www.planetquake.com/qdevels/quake2/5_1_98.html
+
 
 void fire_bfg(edict_t* self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius);
 void fire_rocket(edict_t* self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage);

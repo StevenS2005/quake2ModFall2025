@@ -1,3 +1,6 @@
+// from this website https://web.archive.org/web/20051227030117/http://www.planetquake.com/qdevels/quake2/9_3_98.html
+
+
 #include "g_local.h"
 
 void ChasecamTrack(edict_t* ent);
